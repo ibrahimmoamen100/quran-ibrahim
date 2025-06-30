@@ -305,11 +305,9 @@ const StudentDashboard = () => {
                 {studentData.nextLesson.surah ? (
                   <div className="space-y-6">
                     <div className="flex items-center">
-                      <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mr-6">
-                        <PlayCircle className="text-white" size={32} />
-                      </div>
+
                       <div>
-                        <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                        <h3 className="text-base font-bold text-gray-800 mb-2">
                           {studentData.nextLesson.surah}
                         </h3>
                         {studentData.nextLesson.verses && (
@@ -319,11 +317,7 @@ const StudentDashboard = () => {
                         )}
                       </div>
                     </div>
-                    <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 border border-blue-200">
-                      <p className="text-blue-800 font-medium">
-                        استعد جيداً للدرس القادم واجعله يوماً مباركاً في حفظ القرآن الكريم
-                      </p>
-                    </div>
+
                   </div>
                 ) : (
                   <div className="text-center py-12">

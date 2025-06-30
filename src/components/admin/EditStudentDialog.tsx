@@ -144,7 +144,7 @@ export const EditStudentDialog = ({ student, open, onOpenChange, onSave }: EditS
             
             <TabsContent value="personal" className="space-y-6">
               <div className="card-enhanced">
-                <div className="p-6">
+                <div className="p-2">
                   <h3 className="text-xl font-bold text-green-800 mb-4">
                     المعلومات الشخصية
                   </h3>
@@ -226,7 +226,7 @@ export const EditStudentDialog = ({ student, open, onOpenChange, onSave }: EditS
             
             <TabsContent value="schedule" className="space-y-6">
               <div className="card-enhanced">
-                <div className="p-6">
+                <div className="p-2">
                   <h3 className="text-xl font-bold text-green-800 mb-4">
                     جدول الطالب الأسبوعي
                   </h3>
@@ -240,7 +240,7 @@ export const EditStudentDialog = ({ student, open, onOpenChange, onSave }: EditS
             
             <TabsContent value="surahs" className="space-y-6">
               <div className="card-enhanced">
-                <div className="p-6">
+                <div className="p-2">
                   <h3 className="text-xl font-bold text-green-800 mb-4">
                     السور المكلف بها الطالب
                   </h3>
@@ -258,7 +258,7 @@ export const EditStudentDialog = ({ student, open, onOpenChange, onSave }: EditS
             
             <TabsContent value="payment" className="space-y-6">
               <div className="card-enhanced">
-                <div className="p-6">
+                <div className="p-2">
                   <h3 className="text-xl font-bold text-green-800 mb-4">
                     معلومات الدفع والحضور
                   </h3>
@@ -346,7 +346,7 @@ export const EditStudentDialog = ({ student, open, onOpenChange, onSave }: EditS
             
             <TabsContent value="certificates" className="space-y-6">
               <div className="card-enhanced">
-                <div className="p-6">
+                <div className="p-2">
                   <h3 className="text-xl font-bold text-green-800 mb-4">
                     شهادات الطالب
                   </h3>

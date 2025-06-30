@@ -212,7 +212,7 @@ const AddStudent = () => {
 
   return (
     <AdminLayout>
-      <div className="p-8 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 min-h-screen">
+      <div className="p-2 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 min-h-screen">
         {/* Header */}
         <div className="mb-10 animate-fade-in">
           <div className="flex items-center justify-between mb-8">
@@ -252,8 +252,8 @@ const AddStudent = () => {
           
           <div className="card-body-enhanced">
             <form onSubmit={handleSubmit}>
-              <Tabs defaultValue="personal" className="tabs-enhanced">
-                <TabsList className="grid w-full grid-cols-5 mb-8">
+              <Tabs defaultValue="personal" className="tabs-enhanced relative">
+                <TabsList className="flex flex-col w-full grid-cols-2 mb-8 relative h-auto">
                   <TabsTrigger value="personal" className="text-lg font-semibold">
                     <UserPlus className="w-5 h-5 mr-2" />
                     البيانات الشخصية
