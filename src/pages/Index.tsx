@@ -131,7 +131,7 @@ const Index = () => {
         
         {/* Main Content */}
         <div className="w-full max-w-7xl">
-          <div className="glass-effect rounded-3xl p-12 mb-12 animate-fade-in" style={{animationDelay: '0.2s'}}>
+          <div className="glass-effect rounded-3xl p-3 mb-12 animate-fade-in" style={{animationDelay: '0.2s'}}>
             <h2 className="text-4xl font-bold text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-6">
               منهجية متكاملة في تحفيظ القرآن الكريم
             </h2>
