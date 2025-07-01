@@ -170,7 +170,7 @@ const StudentDashboard = () => {
         <div className="mb-10 animate-fade-in">
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8">
             <div className="order-2 lg:order-1">
-              <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3 font-cairo">
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3 font-cairo">
                 {studentData.name}
               </h1>
               <p className="text-gray-600 mb-4 dir-ltr font-mono text-lg">

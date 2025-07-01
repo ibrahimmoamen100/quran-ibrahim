@@ -55,11 +55,13 @@ const AddStudent = () => {
   const [loading, setLoading] = useState(false);
 
   const handleImageUpload = (result: UploadResult) => {
+    console.log('Image upload result received:', result);
     setUploadedImage(result);
     setPersonalInfo(prev => ({
       ...prev,
       image: result.secureUrl
     }));
+    console.log('Personal info updated with image:', result.secureUrl);
   };
 
   const handleAddSurah = (surahName: string) => {
@@ -89,6 +91,18 @@ const AddStudent = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    console.log('Form submission started');
+    console.log('Current form data:', {
+      personalInfo,
+      uploadedImage,
+      paymentInfo,
+      schedules,
+      surahs,
+      certificates,
+      notes,
+      nextLesson
+    });
+    
     // Validate form
     if (!personalInfo.name || !personalInfo.username) {
       toast({
@@ -97,6 +111,13 @@ const AddStudent = () => {
         variant: "destructive",
       });
       return;
+    }
+
+    // التحقق من الصورة
+    if (!personalInfo.image || personalInfo.image === '/logo.png') {
+      console.log('No custom image uploaded, using default logo');
+    } else {
+      console.log('Custom image will be used:', personalInfo.image);
     }
 
     setLoading(true);
@@ -111,14 +132,7 @@ const AddStudent = () => {
         ? `${paymentInfo.attendedSessions} / ${paymentInfo.totalSessions}` 
         : "0 / 0";
 
-      console.log("Student data to add:", {
-        name: personalInfo.name,
-        username: personalInfo.username,
-        payment_type: paymentType,
-        is_paid: paymentInfo.isPaid
-      });
-
-      const studentId = await studentsService.addStudent({
+      const studentData = {
         name: personalInfo.name,
         username: personalInfo.username,
         image: personalInfo.image || "/logo.png",
@@ -130,7 +144,11 @@ const AddStudent = () => {
         is_paid: paymentInfo.isPaid,
         next_lesson_surah: nextLesson,
         password: personalInfo.password || "123456"  // استخدام كلمة مرور افتراضية إذا لم يتم تحديدها
-      });
+      };
+
+      console.log("Student data to add:", studentData);
+
+      const studentId = await studentsService.addStudent(studentData);
 
       console.log("Student added successfully with ID:", studentId);
 

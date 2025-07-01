@@ -253,68 +253,128 @@ export const StudentsTable = ({ searchQuery }: StudentsTableProps) => {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Table Header */}
-      <div className="flex items-center justify-between p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl border border-blue-200">
-        <div className="flex items-center">
-
-          <div>
-            <h3 className="text-xl font-bold text-gray-800">قائمة الطلاب</h3>
-            <p className="text-gray-600">إجمالي الطلاب: {filteredStudents.length}</p>
-          </div>
-        </div>
-
-      </div>
-
-      {/* Students Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredStudents.map((student) => (
-          <div key={student.id} className="card-enhanced hover-lift group">
-            <div className="card-body-enhanced">
-              {/* Student Header */}
-              <div className="flex items-center mb-6">
-                <div className="relative">
-                  <div className="w-16 h-16 rounded-2xl overflow-hidden border-4 border-white shadow-lg">
-                    <img 
-                      src={student.image} 
-                      alt={student.name}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = "/logo.png";
-                      }}
-                    />
-                  </div>
-                  <div className={`absolute -bottom-1 -right-1 w-6 h-6 rounded-full border-2 border-white ${
-                    student.isPaid ? 'bg-green-500' : 'bg-red-500'
-                  }`}></div>
-                </div>
-                <div className="mr-2 flex-1">
-                  <h4 className="text-xl font-bold text-gray-800 mb-1">{student.name}</h4>
-                  <p className="text-gray-600 text-sm">@{student.username}</p>
-                  <div className="flex gap-2 mt-2">
-                    <Badge className={student.isPaid ? "badge-success" : "badge-error"}>
+    <div className="space-y-4 sm:space-y-6">
+      {/* Desktop Table */}
+      <div className="hidden lg:block">
+        <div className="table-enhanced">
+          <table className="w-full">
+            <thead>
+              <tr>
+                <th className="text-right">الطالب</th>
+                <th className="text-right">اسم المستخدم</th>
+                <th className="text-right">نوع الدفع</th>
+                <th className="text-right">الحضور</th>
+                <th className="text-right">حالة الدفع</th>
+                <th className="text-right">الإجراءات</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredStudents.map((student) => (
+                <tr key={student.id} className="hover:bg-blue-50/50 transition-all duration-300">
+                  <td className="py-4 px-4">
+                    <div className="flex items-center space-x-3 space-x-reverse">
+                      <img 
+                        src={student.image} 
+                        alt={student.name}
+                        className="w-10 h-10 rounded-full object-cover border-2 border-gray-200"
+                      />
+                      <div>
+                        <div className="font-semibold text-gray-900 text-sm sm:text-base">{student.name}</div>
+                        <div className="text-gray-500 text-xs sm:text-sm">{student.username}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="py-4 px-4 text-sm sm:text-base">{student.username}</td>
+                  <td className="py-4 px-4">
+                    <Badge variant="outline" className="text-xs sm:text-sm">
+                      {student.paymentType}
+                    </Badge>
+                  </td>
+                  <td className="py-4 px-4 text-sm sm:text-base">{student.attendance}</td>
+                  <td className="py-4 px-4">
+                    <Badge 
+                      className={student.paymentStatus === "تم الدفع" ? "badge-success" : "badge-warning"}
+                    >
                       {student.paymentStatus}
                     </Badge>
-                    <Badge className="badge-info">{student.paymentType}</Badge>
-                  </div>
+                  </td>
+                  <td className="py-4 px-4">
+                    <div className="flex items-center space-x-2 space-x-reverse">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleEditStudent(student)}
+                        className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 p-2"
+                      >
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleDeleteStudent(student)}
+                        className="text-red-600 hover:text-red-800 hover:bg-red-50 p-2"
+                      >
+                        <Trash className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Mobile Cards */}
+      <div className="lg:hidden space-y-4">
+        {filteredStudents.map((student) => (
+          <div key={student.id} className="card-enhanced hover-lift">
+            <div className="p-4 sm:p-6">
+              {/* Student Header */}
+              <div className="flex items-center space-x-3 space-x-reverse mb-4">
+                <img 
+                  src={student.image} 
+                  alt={student.name}
+                  className="w-12 h-12 sm:w-16 sm:h-16 rounded-full object-cover border-2 border-gray-200"
+                />
+                <div className="flex-1">
+                  <h3 className="font-bold text-gray-900 text-base sm:text-lg">{student.name}</h3>
+                  <p className="text-gray-500 text-sm">@{student.username}</p>
+                </div>
+                <div className="flex items-center space-x-2 space-x-reverse">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleEditStudent(student)}
+                    className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 p-2"
+                  >
+                    <Edit className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleDeleteStudent(student)}
+                    className="text-red-600 hover:text-red-800 hover:bg-red-50 p-2"
+                  >
+                    <Trash className="w-4 h-4" />
+                  </Button>
                 </div>
               </div>
 
               {/* Student Stats */}
-              <div className="grid grid-cols-2 gap-4 mb-6">
-                <div className="text-center p-3 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl">
-                  <div className="text-2xl font-bold text-blue-600">{student.attendedSessions || 0}</div>
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div className="text-center p-2 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl">
+                  <div className="text-lg sm:text-xl font-bold text-blue-600">{student.attendedSessions || 0}</div>
                   <div className="text-xs text-gray-600">جلسات حضرها</div>
                 </div>
-                <div className="text-center p-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl">
-                  <div className="text-2xl font-bold text-purple-600">{student.surahs?.length || 0}</div>
+                <div className="text-center p-2 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl">
+                  <div className="text-lg sm:text-xl font-bold text-purple-600">{student.surahs?.length || 0}</div>
                   <div className="text-xs text-gray-600">سور مكلف بها</div>
                 </div>
               </div>
 
               {/* Student Info */}
-              <div className="space-y-3 mb-6">
+              <div className="space-y-2 sm:space-y-3 mb-4">
                 {student.schedules && student.schedules.length > 0 && (
                   <div className="flex items-center text-sm text-gray-600">
                     <Calendar className="w-4 h-4 mr-2 text-blue-500" />
@@ -335,29 +395,43 @@ export const StudentsTable = ({ searchQuery }: StudentsTableProps) => {
                 )}
               </div>
 
-              {/* Actions */}
-              <div className="flex gap-2">
-                <Button 
-                  className="flex-1 button-primary text-sm"
-                  onClick={() => handleEditStudent(student)}
-                >
-                  <Edit className="w-4 h-4 mr-2" />
-                  تعديل
-                </Button>
-                <Button 
-                  className="button-danger text-sm px-4"
-                  onClick={() => handleDeleteStudent(student)}
-                >
-                  <Trash className="w-4 h-4" />
-                </Button>
+              {/* Payment Info */}
+              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                <div>
+                  <p className="text-sm font-medium text-gray-700">نوع الدفع</p>
+                  <Badge variant="outline" className="text-xs">
+                    {student.paymentType}
+                  </Badge>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-700">حالة الدفع</p>
+                  <Badge 
+                    className={student.paymentStatus === "تم الدفع" ? "badge-success" : "badge-warning"}
+                  >
+                    {student.paymentStatus}
+                  </Badge>
+                </div>
               </div>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Dialogs */}
-      {editDialogOpen && studentToEdit && (
+      {/* Empty State */}
+      {filteredStudents.length === 0 && !loading && (
+        <div className="text-center py-8 sm:py-12">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Users className="text-gray-400 w-8 h-8 sm:w-10 sm:h-10" />
+          </div>
+          <h3 className="text-lg sm:text-xl font-semibold text-gray-600 mb-2">لا توجد نتائج</h3>
+          <p className="text-gray-500 text-sm sm:text-base">
+            {searchQuery ? `لا توجد نتائج للبحث عن "${searchQuery}"` : "لا يوجد طلاب مسجلين حالياً"}
+          </p>
+        </div>
+      )}
+
+      {/* Edit Dialog */}
+      {studentToEdit && (
         <EditStudentDialog
           student={studentToEdit}
           open={editDialogOpen}
@@ -366,7 +440,8 @@ export const StudentsTable = ({ searchQuery }: StudentsTableProps) => {
         />
       )}
 
-      {deleteDialogOpen && studentToDelete && (
+      {/* Delete Dialog */}
+      {studentToDelete && (
         <DeleteStudentDialog
           studentName={studentToDelete.name}
           open={deleteDialogOpen}

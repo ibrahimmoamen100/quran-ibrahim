@@ -46,7 +46,9 @@ export const EditStudentDialog = ({ student, open, onOpenChange, onSave }: EditS
   }, [attendedSessions, totalSessions, toast]);
 
   const handleImageUpload = (result: UploadResult) => {
+    console.log('EditStudentDialog: Image upload result received:', result);
     setStudentData({...studentData, image: result.secureUrl});
+    console.log('EditStudentDialog: Student data updated with image:', result.secureUrl);
   };
 
   const handleAddSurah = (surahName: string) => {
@@ -112,47 +114,47 @@ export const EditStudentDialog = ({ student, open, onOpenChange, onSave }: EditS
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto glass-effect" dir="rtl">
-        <DialogHeader className="card-header-enhanced">
-          <DialogTitle className="text-3xl font-bold text-green-800 text-center font-cairo">
+      <DialogContent className="w-[95vw] max-w-4xl max-h-[95vh] overflow-hidden glass-effect" dir="rtl">
+        <DialogHeader className="card-header-enhanced p-4 sm:p-6">
+          <DialogTitle className="text-xl sm:text-2xl lg:text-3xl font-bold text-green-800 text-center font-cairo">
             تعديل بيانات الطالب
           </DialogTitle>
-          <p className="text-green-700 text-center mt-2">
+          <p className="text-sm sm:text-base text-green-700 text-center mt-2">
             تحديث معلومات الطالب: {studentData.name}
           </p>
         </DialogHeader>
         
-        <div className="card-body-enhanced">
+        <div className="card-body-enhanced p-4 sm:p-6 overflow-y-auto max-h-[calc(95vh-200px)]">
           <Tabs defaultValue="personal" className="w-full tabs-enhanced">
-            <TabsList className="grid w-full grid-cols-5 mb-8">
-              <TabsTrigger value="personal" className="text-sm font-medium">
+            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-1 sm:gap-2 mb-4 sm:mb-6 h-auto">
+              <TabsTrigger value="personal" className="text-xs sm:text-sm font-medium py-2 px-1 sm:px-2">
                 البيانات الشخصية
               </TabsTrigger>
-              <TabsTrigger value="schedule" className="text-sm font-medium">
+              <TabsTrigger value="schedule" className="text-xs sm:text-sm font-medium py-2 px-1 sm:px-2">
                 الجدول الزمني
               </TabsTrigger>
-              <TabsTrigger value="surahs" className="text-sm font-medium">
+              <TabsTrigger value="surahs" className="text-xs sm:text-sm font-medium py-2 px-1 sm:px-2">
                 السور المكلف بها
               </TabsTrigger>
-              <TabsTrigger value="payment" className="text-sm font-medium">
+              <TabsTrigger value="payment" className="text-xs sm:text-sm font-medium py-2 px-1 sm:px-2">
                 معلومات الدفع
               </TabsTrigger>
-              <TabsTrigger value="certificates" className="text-sm font-medium">
+              <TabsTrigger value="certificates" className="text-xs sm:text-sm font-medium py-2 px-1 sm:px-2">
                 الشهادات
               </TabsTrigger>
             </TabsList>
             
-            <TabsContent value="personal" className="space-y-6">
+            <TabsContent value="personal" className="space-y-4 sm:space-y-6">
               <div className="card-enhanced">
-                <div className="p-2">
-                  <h3 className="text-xl font-bold text-green-800 mb-4">
+                <div className="p-3 sm:p-4">
+                  <h3 className="text-lg sm:text-xl font-bold text-green-800 mb-3 sm:mb-4">
                     المعلومات الشخصية
                   </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 gap-4 sm:gap-6">
                     <div className="form-group">
-                      <label className="form-label">اسم الطالب *</label>
+                      <label className="form-label text-sm sm:text-base">اسم الطالب *</label>
                       <Input
-                        className="form-input"
+                        className="form-input text-sm sm:text-base"
                         placeholder="أدخل اسم الطالب الكامل"
                         value={studentData.name}
                         onChange={(e) => setStudentData({...studentData, name: e.target.value})}
@@ -160,9 +162,9 @@ export const EditStudentDialog = ({ student, open, onOpenChange, onSave }: EditS
                     </div>
                     
                     <div className="form-group">
-                      <label className="form-label">اسم المستخدم *</label>
+                      <label className="form-label text-sm sm:text-base">اسم المستخدم *</label>
                       <Input
-                        className="form-input"
+                        className="form-input text-sm sm:text-base"
                         placeholder="أدخل اسم المستخدم"
                         value={studentData.username}
                         onChange={(e) => setStudentData({...studentData, username: e.target.value})}
@@ -170,9 +172,9 @@ export const EditStudentDialog = ({ student, open, onOpenChange, onSave }: EditS
                     </div>
                     
                     <div className="form-group">
-                      <label className="form-label">كلمة المرور</label>
+                      <label className="form-label text-sm sm:text-base">كلمة المرور</label>
                       <Input
-                        className="form-input"
+                        className="form-input text-sm sm:text-base"
                         type="password"
                         placeholder="أدخل كلمة المرور الجديدة (اختياري)"
                         onChange={(e) => {
@@ -185,15 +187,15 @@ export const EditStudentDialog = ({ student, open, onOpenChange, onSave }: EditS
                           }
                         }}
                       />
-                      <p className="text-sm text-gray-500 mt-1">
+                      <p className="text-xs sm:text-sm text-gray-500 mt-1">
                         اتركها فارغة إذا لم ترغب في تغيير كلمة المرور
                       </p>
                     </div>
                     
                     <div className="form-group">
-                      <label className="form-label">السورة التالية</label>
+                      <label className="form-label text-sm sm:text-base">السورة التالية</label>
                       <Input
-                        className="form-input"
+                        className="form-input text-sm sm:text-base"
                         placeholder="أدخل السورة التالية للحفظ"
                         value={nextLesson}
                         onChange={(e) => setNextLesson(e.target.value)}
@@ -201,8 +203,8 @@ export const EditStudentDialog = ({ student, open, onOpenChange, onSave }: EditS
                     </div>
                   </div>
 
-                  <div className="form-group mt-6">
-                    <label className="form-label">صورة الطالب</label>
+                  <div className="form-group mt-4 sm:mt-6">
+                    <label className="form-label text-sm sm:text-base">صورة الطالب</label>
                     <ImageUpload 
                       onImageUpload={handleImageUpload}
                       currentImage={studentData.image}
@@ -210,24 +212,24 @@ export const EditStudentDialog = ({ student, open, onOpenChange, onSave }: EditS
                     />
                   </div>
 
-                  <div className="form-group mt-6">
-                    <label className="form-label">ملاحظات</label>
+                  <div className="form-group mt-4 sm:mt-6">
+                    <label className="form-label text-sm sm:text-base">ملاحظات</label>
                     <Textarea
-                      className="form-textarea"
+                      className="form-textarea text-sm sm:text-base"
                       placeholder="أدخل أي ملاحظات إضافية عن الطالب"
                       value={studentData.notes || ''}
                       onChange={(e) => setStudentData({...studentData, notes: e.target.value})}
-                      rows={4}
+                      rows={3}
                     />
                   </div>
                 </div>
               </div>
             </TabsContent>
             
-            <TabsContent value="schedule" className="space-y-6">
+            <TabsContent value="schedule" className="space-y-4 sm:space-y-6">
               <div className="card-enhanced">
-                <div className="p-2">
-                  <h3 className="text-xl font-bold text-green-800 mb-4">
+                <div className="p-3 sm:p-4">
+                  <h3 className="text-lg sm:text-xl font-bold text-green-800 mb-3 sm:mb-4">
                     جدول الطالب الأسبوعي
                   </h3>
                   <WeeklySchedule 
@@ -238,10 +240,10 @@ export const EditStudentDialog = ({ student, open, onOpenChange, onSave }: EditS
               </div>
             </TabsContent>
             
-            <TabsContent value="surahs" className="space-y-6">
+            <TabsContent value="surahs" className="space-y-4 sm:space-y-6">
               <div className="card-enhanced">
-                <div className="p-2">
-                  <h3 className="text-xl font-bold text-green-800 mb-4">
+                <div className="p-3 sm:p-4">
+                  <h3 className="text-lg sm:text-xl font-bold text-green-800 mb-3 sm:mb-4">
                     السور المكلف بها الطالب
                   </h3>
                   <SurahSelector 
@@ -256,20 +258,20 @@ export const EditStudentDialog = ({ student, open, onOpenChange, onSave }: EditS
               </div>
             </TabsContent>
             
-            <TabsContent value="payment" className="space-y-6">
+            <TabsContent value="payment" className="space-y-4 sm:space-y-6">
               <div className="card-enhanced">
-                <div className="p-2">
-                  <h3 className="text-xl font-bold text-green-800 mb-4">
+                <div className="p-3 sm:p-4">
+                  <h3 className="text-lg sm:text-xl font-bold text-green-800 mb-3 sm:mb-4">
                     معلومات الدفع والحضور
                   </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 gap-4 sm:gap-6">
                     <div className="form-group">
-                      <label className="form-label">نوع الدفع</label>
+                      <label className="form-label text-sm sm:text-base">نوع الدفع</label>
                       <Select 
                         value={studentData.paymentType} 
                         onValueChange={(value) => setStudentData({...studentData, paymentType: value})}
                       >
-                        <SelectTrigger className="select-enhanced">
+                        <SelectTrigger className="select-enhanced text-sm sm:text-base">
                           <SelectValue placeholder="اختر نوع الدفع" />
                         </SelectTrigger>
                         <SelectContent>
@@ -280,12 +282,12 @@ export const EditStudentDialog = ({ student, open, onOpenChange, onSave }: EditS
                     </div>
                     
                     <div className="form-group">
-                      <label className="form-label">حالة الدفع</label>
+                      <label className="form-label text-sm sm:text-base">حالة الدفع</label>
                       <Select 
                         value={isPaid ? "paid" : "unpaid"} 
                         onValueChange={(value) => setIsPaid(value === "paid")}
                       >
-                        <SelectTrigger className="select-enhanced">
+                        <SelectTrigger className="select-enhanced text-sm sm:text-base">
                           <SelectValue placeholder="اختر حالة الدفع" />
                         </SelectTrigger>
                         <SelectContent>
@@ -297,11 +299,11 @@ export const EditStudentDialog = ({ student, open, onOpenChange, onSave }: EditS
                   </div>
 
                   {studentData.paymentType === "شهري" && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div className="grid grid-cols-1 gap-4 sm:gap-6 mt-4 sm:mt-6">
                       <div className="form-group">
-                        <label className="form-label">إجمالي الجلسات</label>
+                        <label className="form-label text-sm sm:text-base">إجمالي الجلسات</label>
                         <Input
-                          className="form-input"
+                          className="form-input text-sm sm:text-base"
                           type="number"
                           placeholder="عدد الجلسات الشهرية"
                           value={totalSessions}
@@ -310,7 +312,7 @@ export const EditStudentDialog = ({ student, open, onOpenChange, onSave }: EditS
                       </div>
                       
                       <div className="form-group">
-                        <label className="form-label">الجلسات الحاضرة</label>
+                        <label className="form-label text-sm sm:text-base">الجلسات الحاضرة</label>
                         <div className="flex items-center space-x-2 space-x-reverse">
                           <Button
                             type="button"
@@ -322,7 +324,7 @@ export const EditStudentDialog = ({ student, open, onOpenChange, onSave }: EditS
                             <Minus size={16} />
                           </Button>
                           <Input
-                            className="form-input text-center"
+                            className="form-input text-center text-sm sm:text-base"
                             type="number"
                             value={attendedSessions}
                             onChange={(e) => setAttendedSessions(parseInt(e.target.value) || 0)}
@@ -344,10 +346,10 @@ export const EditStudentDialog = ({ student, open, onOpenChange, onSave }: EditS
               </div>
             </TabsContent>
             
-            <TabsContent value="certificates" className="space-y-6">
+            <TabsContent value="certificates" className="space-y-4 sm:space-y-6">
               <div className="card-enhanced">
-                <div className="p-2">
-                  <h3 className="text-xl font-bold text-green-800 mb-4">
+                <div className="p-3 sm:p-4">
+                  <h3 className="text-lg sm:text-xl font-bold text-green-800 mb-3 sm:mb-4">
                     شهادات الطالب
                   </h3>
                   <CertificateUpload 
@@ -361,18 +363,18 @@ export const EditStudentDialog = ({ student, open, onOpenChange, onSave }: EditS
           </Tabs>
 
           {/* Footer */}
-          <div className="flex justify-end space-x-4 space-x-reverse pt-6 border-t border-gray-200 mt-8">
+          <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-4 sm:space-x-reverse pt-4 sm:pt-6 border-t border-gray-200 mt-6 sm:mt-8">
             <Button
               type="button"
               variant="outline"
-              className="btn-secondary"
+              className="btn-secondary text-sm sm:text-base px-4 sm:px-6 py-2 sm:py-3"
               onClick={() => onOpenChange(false)}
             >
               إلغاء
             </Button>
             <Button
               type="button"
-              className="btn-primary text-lg px-8 py-3 font-semibold"
+              className="btn-primary text-sm sm:text-base px-6 sm:px-8 py-2 sm:py-3 font-semibold"
               onClick={handleSave}
             >
               حفظ التغييرات

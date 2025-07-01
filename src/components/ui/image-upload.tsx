@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from './button';
-import { Upload, X, Image as ImageIcon } from 'lucide-react';
-import { cloudinaryService, UploadResult, testCloudinaryConfig } from '@/integrations/cloudinary/services';
+import { Upload, X, ImageIcon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { cloudinaryService, UploadResult, testCloudinaryConfig } from '@/integrations/cloudinary/services';
+import { validateCloudinaryConfig } from '@/integrations/cloudinary/config';
 
 interface ImageUploadProps {
   onImageUpload: (result: UploadResult) => void;
@@ -24,8 +25,16 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
 
   // اختبار التكوين عند تحميل المكون
   useEffect(() => {
+    console.log('ImageUpload component mounted');
+    
+    // اختبار التكوين المحسن
+    const isValid = validateCloudinaryConfig();
+    console.log('Config validation result:', isValid);
+    
     const config = testCloudinaryConfig();
-    if (!config.isValid) {
+    console.log('Cloudinary config test result:', config);
+    
+    if (!isValid || !config.isValid) {
       toast({
         title: "تحذير",
         description: "تكوين Cloudinary قد لا يكون صحيحاً. يرجى التحقق من الإعدادات.",
@@ -40,13 +49,23 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   }, [currentImage]);
 
   const handleFileUpload = async (file: File) => {
-    if (!file) return;
+    if (!file) {
+      console.log('No file selected');
+      return;
+    }
+
+    console.log('File selected:', {
+      name: file.name,
+      size: file.size,
+      type: file.type,
+      lastModified: file.lastModified
+    });
 
     // التحقق من نوع الملف
     if (!file.type.startsWith('image/')) {
       toast({
-        title: "خطأ",
-        description: "يرجى اختيار ملف صورة صالح",
+        title: "خطأ في نوع الملف",
+        description: "يرجى اختيار ملف صورة صالح (JPG, PNG, GIF)",
         variant: "destructive",
       });
       return;
@@ -55,8 +74,8 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     // التحقق من حجم الملف (5MB كحد أقصى)
     if (file.size > 5 * 1024 * 1024) {
       toast({
-        title: "خطأ",
-        description: "حجم الملف يجب أن يكون أقل من 5 ميجابايت",
+        title: "حجم الملف كبير جداً",
+        description: "حجم الملف يجب أن يكون أقل من 5 ميجابايت. يرجى ضغط الصورة أو اختيار صورة أصغر",
         variant: "destructive",
       });
       return;
@@ -72,12 +91,21 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     setIsUploading(true);
     
     try {
-      console.log('Starting file upload...', {
+      console.log('Starting file upload to Cloudinary...', {
         fileName: file.name,
         fileSize: file.size,
         fileType: file.type,
-        folder
+        folder,
+        timestamp: new Date().toISOString()
       });
+
+      // اختبار التكوين قبل الرفع
+      const config = testCloudinaryConfig();
+      console.log('Cloudinary config before upload:', config);
+
+      if (!config.isValid) {
+        throw new Error('تكوين Cloudinary غير صحيح. يرجى التحقق من الإعدادات.');
+      }
 
       const result = await cloudinaryService.uploadImage(file, folder);
       
@@ -87,19 +115,46 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
       onImageUpload(result);
       
       toast({
-        title: "نجح",
-        description: "تم رفع الصورة بنجاح",
+        title: "تم رفع الصورة بنجاح",
+        description: "تم حفظ الصورة في السحابة وعرضها بنجاح",
       });
     } catch (error) {
-      console.error('Upload error:', error);
+      console.error('Upload error details:', {
+        error,
+        errorMessage: error instanceof Error ? error.message : 'Unknown error',
+        errorStack: error instanceof Error ? error.stack : undefined,
+        timestamp: new Date().toISOString()
+      });
       
       let errorMessage = 'حدث خطأ أثناء رفع الصورة';
+      let errorTitle = 'خطأ في رفع الصورة';
+      
       if (error instanceof Error) {
-        errorMessage = error.message;
+        const message = error.message;
+        
+        // تحليل رسائل الخطأ الشائعة
+        if (message.includes('Upload preset not found')) {
+          errorTitle = 'خطأ في إعدادات Cloudinary';
+          errorMessage = 'Upload Preset غير موجود. يرجى التحقق من إعدادات Cloudinary';
+        } else if (message.includes('Cloud name not found')) {
+          errorTitle = 'خطأ في إعدادات Cloudinary';
+          errorMessage = 'اسم السحابة غير صحيح. يرجى التحقق من إعدادات Cloudinary';
+        } else if (message.includes('Network error')) {
+          errorTitle = 'خطأ في الاتصال';
+          errorMessage = 'فشل الاتصال بـ Cloudinary. تحقق من اتصال الإنترنت';
+        } else if (message.includes('Timeout')) {
+          errorTitle = 'انتهت مهلة الاتصال';
+          errorMessage = 'انتهت مهلة الاتصال. جرب مرة أخرى أو تحقق من سرعة الإنترنت';
+        } else if (message.includes('تكوين Cloudinary غير صحيح')) {
+          errorTitle = 'خطأ في التكوين';
+          errorMessage = message;
+        } else {
+          errorMessage = message;
+        }
       }
       
       toast({
-        title: "خطأ",
+        title: errorTitle,
         description: errorMessage,
         variant: "destructive",
       });
@@ -112,6 +167,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   };
 
   const handleRemoveImage = () => {
+    console.log('Removing image');
     setPreviewUrl(null);
     onImageUpload({ url: '', publicId: '', secureUrl: '' });
     if (fileInputRef.current) {
@@ -120,6 +176,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   };
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('File input changed:', event.target.files);
     const file = event.target.files?.[0];
     if (file) {
       handleFileUpload(file);
@@ -127,6 +184,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   };
 
   const triggerFileSelect = () => {
+    console.log('Triggering file select');
     fileInputRef.current?.click();
   };
 
@@ -215,9 +273,38 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
 
       {/* معلومات إضافية */}
       <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg sm:rounded-xl p-3 sm:p-4 border border-blue-200">
-        <p className="text-blue-700 text-xs sm:text-sm font-medium">
+        <p className="text-blue-700 text-xs sm:text-sm font-medium mb-2">
           💡 نصيحة: اختر صورة واضحة للطالب لتسهيل التعرف عليه
         </p>
+        
+        {/* زر اختبار للتشخيص */}
+        <Button
+          onClick={() => {
+            console.log('=== Manual Cloudinary Test ===');
+            const config = testCloudinaryConfig();
+            console.log('Current config:', config);
+            
+            // إنشاء ملف اختبار بسيط
+            const testBlob = new Blob(['test'], { type: 'text/plain' });
+            const testFile = new File([testBlob], 'test.txt', { type: 'text/plain' });
+            
+            console.log('Test file created:', testFile);
+            
+            // محاولة رفع ملف اختبار (سيفشل لأنه ليس صورة)
+            cloudinaryService.uploadImage(testFile, 'test')
+              .then(result => {
+                console.log('Test upload succeeded (unexpected):', result);
+              })
+              .catch(error => {
+                console.log('Test upload failed (expected):', error.message);
+              });
+          }}
+          variant="outline"
+          size="sm"
+          className="mt-2 text-xs"
+        >
+          اختبار التكوين
+        </Button>
       </div>
     </div>
   );
