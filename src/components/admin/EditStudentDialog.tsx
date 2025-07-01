@@ -208,7 +208,7 @@ export const EditStudentDialog = ({ student, open, onOpenChange, onSave }: EditS
                     <ImageUpload 
                       onImageUpload={handleImageUpload}
                       currentImage={studentData.image}
-                      folder="students"
+                      folder={`students/${studentData.id}`}
                     />
                   </div>
 
