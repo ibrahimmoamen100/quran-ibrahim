@@ -20,7 +20,7 @@ const Index = () => {
     console.log("Admin login attempt:", { adminUsername, adminPassword });
     
     // Admin login check
-    if (adminUsername === "ibrahim" && adminPassword === "45086932") {
+    if (adminUsername === "hema" && adminPassword === "4508") {
       console.log("Admin login successful, navigating to /admin");
       toast({
         title: "تم تسجيل الدخول بنجاح",
