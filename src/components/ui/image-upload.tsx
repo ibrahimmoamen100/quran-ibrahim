@@ -10,13 +10,15 @@ interface ImageUploadProps {
   currentImage?: string;
   className?: string;
   folder?: string;
+  onUploadingChange?: (uploading: boolean) => void;
 }
 
 export const ImageUpload: React.FC<ImageUploadProps> = ({
   onImageUpload,
   currentImage,
   className = '',
-  folder = 'students'
+  folder = 'students',
+  onUploadingChange
 }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(currentImage || null);
@@ -89,6 +91,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     reader.readAsDataURL(file);
 
     setIsUploading(true);
+    if (onUploadingChange) onUploadingChange(true);
     
     try {
       console.log('Starting file upload to Cloudinary...', {
@@ -163,6 +166,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
       setPreviewUrl(currentImage || null);
     } finally {
       setIsUploading(false);
+      if (onUploadingChange) onUploadingChange(false);
     }
   };
 

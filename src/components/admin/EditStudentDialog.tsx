@@ -32,6 +32,7 @@ export const EditStudentDialog = ({ student, open, onOpenChange, onSave }: EditS
   const [schedules, setSchedules] = useState(student.schedules || []);
   const [surahs, setSurahs] = useState(student.surahs || []);
   const [certificates, setCertificates] = useState(student.certificates || []);
+  const [isUploading, setIsUploading] = useState(false);
 
   // Reset isPaid when attendedSessions reaches totalSessions
   useEffect(() => {
@@ -47,7 +48,7 @@ export const EditStudentDialog = ({ student, open, onOpenChange, onSave }: EditS
 
   const handleImageUpload = (result: UploadResult) => {
     console.log('EditStudentDialog: Image upload result received:', result);
-    setStudentData({...studentData, image: result.secureUrl});
+    setStudentData(prev => ({...prev, image: result.secureUrl}));
     console.log('EditStudentDialog: Student data updated with image:', result.secureUrl);
   };
 
@@ -207,6 +208,7 @@ export const EditStudentDialog = ({ student, open, onOpenChange, onSave }: EditS
                     <label className="form-label text-sm sm:text-base">صورة الطالب</label>
                     <ImageUpload 
                       onImageUpload={handleImageUpload}
+                      onUploadingChange={setIsUploading}
                       currentImage={studentData.image}
                       folder={`students/${studentData.id}`}
                     />
@@ -376,6 +378,7 @@ export const EditStudentDialog = ({ student, open, onOpenChange, onSave }: EditS
               type="button"
               className="btn-primary text-sm sm:text-base px-6 sm:px-8 py-2 sm:py-3 font-semibold"
               onClick={handleSave}
+              disabled={isUploading}
             >
               حفظ التغييرات
             </Button>
