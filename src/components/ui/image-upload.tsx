@@ -266,7 +266,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
               <Button
                 onClick={triggerFileSelect}
                 disabled={isUploading}
-                className="button-secondary mt-2 w-full sm:w-auto"
+                className="button-primary mt-2 w-full sm:w-auto"
               >
                 تغيير الصورة
               </Button>

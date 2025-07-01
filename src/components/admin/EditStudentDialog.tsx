@@ -369,7 +369,7 @@ export const EditStudentDialog = ({ student, open, onOpenChange, onSave }: EditS
             <Button
               type="button"
               variant="outline"
-              className="btn-secondary text-sm sm:text-base px-4 sm:px-6 py-2 sm:py-3"
+              className="btn-primary text-sm sm:text-base px-4 sm:px-6 py-2 sm:py-3"
               onClick={() => onOpenChange(false)}
             >
               إلغاء

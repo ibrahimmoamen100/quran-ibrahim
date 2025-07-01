@@ -408,7 +408,7 @@ const StudentDashboard = () => {
                             </div>
                             <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 border border-purple-200">
                               <p className="text-purple-700 text-sm font-medium">
-                                التقييم: {surah.rating}/5 نجوم
+                                التقييم: {surah.rating}/10 نجوم
                               </p>
                             </div>
                           </div>
